@@ -86,7 +86,7 @@ public class PatronCollection extends EntityBase {
 	
 				if (patron != null)
 				{
-					addPatron(patron);
+					patrons.add(patron);
 				}
 			}
 	
@@ -99,32 +99,28 @@ public class PatronCollection extends EntityBase {
 		}
 	}
 	
-	private void addPatron(Patron patron){
+	
+	public void findPatronsOlderThan(String date){
+		String query = "SELECT * FROM " + myTableName + " WHERE (dateOfBirth >= " + date + ")";
+		retrieveHelper(query);
+	}
+	
+	public void findPatronsYoungerThan(String date){
+		String query = "SELECT * FROM " + myTableName + " WHERE (dateOfBirth <= " + date + ")";
+		retrieveHelper(query);
 		
 	}
 	
-	public Vector<Patron> findPatronsOlderThan(String date){
-		String query = "SELECT * FROM " + myTableName + " WHERE (dateOfBirth >= " + date + ")";
-		retrieveHelper(query);
-		return patrons;
-	}
-	
-	public Vector<Patron>findPatronsYoungerThan(String date){
-		String query = "SELECT * FROM " + myTableName + " WHERE (dateOfBirth <= " + date + ")";
-		retrieveHelper(query);
-		return patrons;
-	}
-	
-	public Vector<Patron>findPatronsAtZipCode(String zip){
+	public void findPatronsAtZipCode(String zip){
 		String query = "SELECT * FROM " + myTableName + " WHERE (zip = " + zip + ")";
 		retrieveHelper(query);
-		return patrons;
+	
 	}
 	
-	public Vector<Patron>findPatronsWithNameLike(String name){
+	public void findPatronsWithNameLike(String name){
 		String query = "SELECT * FROM " + myTableName + " WHERE (name LIKE " + name + ")";
 		retrieveHelper(query);
-		return patrons;
+	
 	}
 
 

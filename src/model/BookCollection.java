@@ -3,11 +3,13 @@ package model;
 import java.util.Properties;
 import java.util.Vector;
 
+import exception.InvalidPrimaryKeyException;
+
 public class BookCollection extends EntityBase {
 
-	private static final String myTableName = "Patron";
+	private static final String myTableName = "Book";
 
-	private Vector<Patron> patrons;
+	private Vector<Patron> books;
 	// GUI Components
 
 	// constructor for this class
@@ -39,7 +41,7 @@ public class BookCollection extends EntityBase {
 //
 //		Vector allDataRetrieved = getSelectQueryResult(query);
 
-		patrons = new Vector<Patron>();
+		books = new Vector<Patron>();
 //		if (allDataRetrieved != null)
 //		{
 //			patrons = new Vector<Patron>();
@@ -65,12 +67,12 @@ public class BookCollection extends EntityBase {
 
 	}
 	
-	private void retrieveHelper(String query){
+	private void retrieveHelper(String query) throws InvalidPrimaryKeyException{
 		Vector allDataRetrieved = getSelectQueryResult(query);
 		
 		if (allDataRetrieved != null)
 		{
-			patrons = new Vector<Patron>();
+			books = new Vector<Patron>();
 	
 			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
 			{
@@ -80,45 +82,42 @@ public class BookCollection extends EntityBase {
 	
 				if (patron != null)
 				{
-					addPatron(patron);
+					books.add(patron);
 				}
 			}
 	
 		}
 		else
 		{
-//			throw new InvalidPrimaryKeyException("No accounts for customer : "
-//				+ patronId + ". Name : " + patron.getState("name"));
-			patrons = new Vector<Patron>();
+			books = new Vector<Patron>();
+			throw new InvalidPrimaryKeyException("No item found");
+			
 		}
 	}
 	
-	private void addPatron(Patron patron){
+
+	public void findBooksOlderThanDate(String year) throws InvalidPrimaryKeyException{
+		String query = "SELECT * FROM " + myTableName + " WHERE (pubYear <= " + year + ")";
+		retrieveHelper(query);
 		
 	}
 	
-	public Vector<Patron> findBooksOlderThanDate(String year){
+	public void findBooksNewerThanDate(String year) throws InvalidPrimaryKeyException{
 		String query = "SELECT * FROM " + myTableName + " WHERE (pubYear >= " + year + ")";
 		retrieveHelper(query);
-		return patrons;
+		
 	}
 	
-	public Vector<Patron>findBooksNewerThanDate(String year){
-		String query = "SELECT * FROM " + myTableName + " WHERE (pubYear <= " + year + ")";
-		retrieveHelper(query);
-		return patrons;
-	}
-	
-	public Vector<Patron>findBooksWithTitleLike(String title){
+	public void findBooksWithTitleLike(String title) throws InvalidPrimaryKeyException{
 		String query = "SELECT * FROM " + myTableName + " WHERE (title LIKE " + title + ")";
 		retrieveHelper(query);
-		return patrons;
+		
 	}
 	
-	public Vector<Patron>findBooksWithAuthorLike(String author){
+	public void findBooksWithAuthorLike(String author) throws InvalidPrimaryKeyException{
 		String query = "SELECT * FROM " + myTableName + " WHERE (author LIKE " + author + ")";
 		retrieveHelper(query);
-		return patrons;
+		
 	}
 
 
@@ -129,10 +128,10 @@ public class BookCollection extends EntityBase {
 	//----------------------------------------------------------
 	public Object getState(String key)
 	{
-		if (key.equals("Patrons"))
-			return patrons;
+		if (key.equals("Books"))
+			return books;
 		else
-		if (key.equals("PatronList"))
+		if (key.equals("BookList"))
 			return this;
 		return null;
 	}
@@ -148,9 +147,9 @@ public class BookCollection extends EntityBase {
 	public Patron retrieve(String patronId)
 	{
 		Patron retValue = null;
-		for (int cnt = 0; cnt < patrons.size(); cnt++)
+		for (int cnt = 0; cnt < books.size(); cnt++)
 		{
-			Patron nextAcct = patrons.elementAt(cnt);
+			Patron nextAcct = books.elementAt(cnt);
 			String nextAccNum = (String)nextAcct.getState("patronId");
 			if (nextAccNum.equals(patronId) == true)
 			{
