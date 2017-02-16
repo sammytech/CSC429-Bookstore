@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Bookstore {
+public class LIbrary {
 
 	public static void main(String[] args) {
 		System.out.println("What do you want to do? (Type Number) \n"

@@ -1,0 +1,122 @@
+[2/3/17 11:33 AM]|Book|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 0: Data truncation: Data too long for column 'pubYear' at row 1>
+[2/3/17 11:34 AM]|Book|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 0: Data truncation: Data too long for column 'pubYear' at row 1>
+[2/3/17 11:35 AM]|Book|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 0: Data truncation: Data too long for column 'pubYear' at row 1>
+[2/3/17 1:37 PM]|BookCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'baby' in 'where clause'>
+[2/3/17 1:38 PM]|BookCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%baby%)' at line 1>
+[2/3/17 1:38 PM]|BookCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%baby%)' at line 1>
+[2/8/17 11:27 AM]|PatronCollection|getSchemaInfo|Error|NOTAG|null<SQL Exception: 0: The last packet successfully received from the server was61946 milliseconds ago.The last packet sent successfully to the server was 61946 milliseconds ago, which  is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.>
+[2/8/17 11:27 AM]|PatronCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 0: No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:
+
+
+** BEGIN NESTED EXCEPTION ** 
+
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException
+MESSAGE: The last packet successfully received from the server was61946 milliseconds ago.The last packet sent successfully to the server was 61946 milliseconds ago, which  is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
+
+STACKTRACE:
+
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was61946 milliseconds ago.The last packet sent successfully to the server was 61946 milliseconds ago, which  is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:406)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1074)
+	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3270)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1932)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2101)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2548)
+	at com.mysql.jdbc.ConnectionImpl.unsetMaxRows(ConnectionImpl.java:5391)
+	at com.mysql.jdbc.StatementImpl.realClose(StatementImpl.java:2304)
+	at com.mysql.jdbc.ConnectionImpl.closeAllOpenStatements(ConnectionImpl.java:1489)
+	at com.mysql.jdbc.ConnectionImpl.realClose(ConnectionImpl.java:4289)
+	at com.mysql.jdbc.ConnectionImpl.cleanup(ConnectionImpl.java:1265)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2581)
+	at com.mysql.jdbc.StatementImpl.executeSimpleNonQuery(StatementImpl.java:1502)
+	at com.mysql.jdbc.StatementImpl.executeQuery(StatementImpl.java:1404)
+	at com.mysql.jdbc.DatabaseMetaData$9.forEach(DatabaseMetaData.java:4844)
+	at com.mysql.jdbc.IterateBlock.doForAll(IterateBlock.java:50)
+	at com.mysql.jdbc.DatabaseMetaData.getTables(DatabaseMetaData.java:4822)
+	at com.mysql.jdbc.DatabaseMetaData$2.forEach(DatabaseMetaData.java:2395)
+	at com.mysql.jdbc.IterateBlock.doForAll(IterateBlock.java:50)
+	at com.mysql.jdbc.DatabaseMetaData.getColumns(DatabaseMetaData.java:2361)
+	at database.Persistable.getSchemaInfo(Persistable.java:104)
+	at model.PatronCollection.initializeSchema(PatronCollection.java:174)
+	at model.EntityBase.<init>(EntityBase.java:71)
+	at model.PatronCollection.<init>(PatronCollection.java:23)
+	at Bookstore.displayPatronByDate(Bookstore.java:154)
+	at Bookstore.main(Bookstore.java:36)
+Caused by: java.net.SocketException: Broken pipe
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:109)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:153)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3251)
+	... 23 more
+
+
+** END NESTED EXCEPTION **
+
+>
+[2/9/17 3:34 PM]|BookCollection|getSchemaInfo|Error|NOTAG|null<SQL Exception: 0: Communications link failure
+
+Last packet sent to the server was 14436768 ms ago.>
+[2/9/17 3:34 PM]|BookCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 0: No operations allowed after connection closed.Connection was implicitly closed due to underlying exception/error:
+
+
+** BEGIN NESTED EXCEPTION ** 
+
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException
+MESSAGE: Communications link failure
+
+Last packet sent to the server was 14436770 ms ago.
+
+STACKTRACE:
+
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+Last packet sent to the server was 14436770 ms ago.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:406)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1074)
+	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3270)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1932)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2101)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2548)
+	at com.mysql.jdbc.ConnectionImpl.unsetMaxRows(ConnectionImpl.java:5391)
+	at com.mysql.jdbc.StatementImpl.realClose(StatementImpl.java:2304)
+	at com.mysql.jdbc.ConnectionImpl.closeAllOpenStatements(ConnectionImpl.java:1489)
+	at com.mysql.jdbc.ConnectionImpl.realClose(ConnectionImpl.java:4289)
+	at com.mysql.jdbc.ConnectionImpl.cleanup(ConnectionImpl.java:1265)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2581)
+	at com.mysql.jdbc.StatementImpl.executeSimpleNonQuery(StatementImpl.java:1502)
+	at com.mysql.jdbc.StatementImpl.executeQuery(StatementImpl.java:1404)
+	at com.mysql.jdbc.DatabaseMetaData$9.forEach(DatabaseMetaData.java:4844)
+	at com.mysql.jdbc.IterateBlock.doForAll(IterateBlock.java:50)
+	at com.mysql.jdbc.DatabaseMetaData.getTables(DatabaseMetaData.java:4822)
+	at com.mysql.jdbc.DatabaseMetaData$2.forEach(DatabaseMetaData.java:2395)
+	at com.mysql.jdbc.IterateBlock.doForAll(IterateBlock.java:50)
+	at com.mysql.jdbc.DatabaseMetaData.getColumns(DatabaseMetaData.java:2361)
+	at database.Persistable.getSchemaInfo(Persistable.java:104)
+	at model.BookCollection.initializeSchema(BookCollection.java:170)
+	at model.EntityBase.<init>(EntityBase.java:71)
+	at model.BookCollection.<init>(BookCollection.java:19)
+	at Bookstore.displayTitle(Bookstore.java:118)
+	at Bookstore.main(Bookstore.java:37)
+Caused by: java.net.SocketException: Broken pipe
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:109)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:153)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3251)
+	... 23 more
+
+
+** END NESTED EXCEPTION **
+
+>
