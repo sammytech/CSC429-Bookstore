@@ -6,8 +6,12 @@ import java.util.Properties;
 import java.util.Vector;
 
 import exception.InvalidPrimaryKeyException;
+import impresario.IView;
+import javafx.scene.Scene;
+import userinterface.View;
+import userinterface.ViewFactory;
 
-public class Patron extends EntityBase {
+public class Patron extends EntityBase implements IView {
 
 	private static final String myTableName = "Patron";
 
@@ -105,7 +109,7 @@ public class Patron extends EntityBase {
 	private void setDependencies()
 	{
 		dependencies = new Properties();
-	
+		dependencies.setProperty("NewPatronCancelled", "ViewCancelled");
 		myRegistry.setDependencies(dependencies);
 	}
 
@@ -153,6 +157,39 @@ public class Patron extends EntityBase {
 		}
 	}
 
+	public Vector<String> getEntryListView()
+	{
+		Vector<String> v = new Vector<String>();
+		v.addElement(persistentState.getProperty("patronId"));
+		v.addElement(persistentState.getProperty("name"));
+		v.addElement(persistentState.getProperty("address"));
+		v.addElement(persistentState.getProperty("city"));
+		v.addElement(persistentState.getProperty("stateCode"));
+		v.addElement(persistentState.getProperty("zip"));
+		v.addElement(persistentState.getProperty("email"));
+		v.addElement(persistentState.getProperty("dateOfBirth"));
+		v.addElement(persistentState.getProperty("status"));
 
+		return v;
+	}
 
+	protected Scene createView()
+	{
+		Scene currentScene = myViews.get("NewBookView");
+
+		if (currentScene == null)
+		{
+			// create our initial view
+			View newView = ViewFactory.createView("NewPatronView", this);
+			currentScene = new Scene(newView);
+			myViews.put("NewPatronView", currentScene);
+			return currentScene;
+		}
+		return currentScene;
+	}
+
+	@Override
+	public void updateState(String key, Object value) {
+		stateChangeRequest(key, value);
+	}
 }

@@ -18,56 +18,12 @@ public class PatronCollection extends EntityBase {
 
 	// constructor for this class
 	//----------------------------------------------------------
-	public PatronCollection( Patron patron) throws
-		Exception
+	public PatronCollection()
 	{
 		super(myTableName);
 
-//		if (patron == null)
-//		{
-//			new Event(Event.getLeafLevelClassName(this), "<init>",
-//				"Missing account holder information", Event.FATAL);
-//			throw new Exception
-//				("UNEXPECTED ERROR: PatronCollection.<init>: patron information is null");
-//		}
-//
-//		String patronId = (String)patron.getState("patronId");
-//
-//		if (patronId == null)
-//		{
-//			new Event(Event.getLeafLevelClassName(this), "<init>",
-//				"Data corrupted: Patron Holder has no id in database", Event.FATAL);
-//			throw new Exception
-//			 ("UNEXPECTED ERROR: PatronCollection.<init>: Data corrupted: account holder has no id in repository");
-//		}
-//
-//		String query = "SELECT * FROM " + myTableName + " WHERE (patronId = " + patronId + ")";
-//
-//		Vector allDataRetrieved = getSelectQueryResult(query);
 
 		patrons = new Vector<Patron>();
-//		if (allDataRetrieved != null)
-//		{
-//			patrons = new Vector<Patron>();
-//
-//			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
-//			{
-//				Properties nextPatronData = (Properties)allDataRetrieved.elementAt(cnt);
-//
-//				Patron account = new Patron(nextPatronData);
-//
-//				if (account != null)
-//				{
-//					add(account);
-//				}
-//			}
-//
-//		}
-//		else
-//		{
-//			throw new InvalidPrimaryKeyException("No accounts for customer : "
-//				+ patronId + ". Name : " + patron.getState("name"));
-//		}
 
 	}
 	
@@ -172,6 +128,20 @@ public class PatronCollection extends EntityBase {
 		{
 			mySchema = getSchemaInfo(tableName);
 		}
+	}
+
+	protected void createAndShowView()
+	{
+		Scene currentScene = myViews.get("PatronCollectionView");
+
+		if (currentScene == null)
+		{
+			// create our initial view
+			View newView = ViewFactory.createView("PatronCollectionView", this);
+			currentScene = new Scene(newView);
+			myViews.put("PatronCollectionView", currentScene);
+		}
+		swapToView(currentScene);
 	}
 
 

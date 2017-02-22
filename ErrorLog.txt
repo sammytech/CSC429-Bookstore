@@ -120,3 +120,6 @@ Caused by: java.net.SocketException: Broken pipe
 ** END NESTED EXCEPTION **
 
 >
+[2/16/17 11:29 AM]|LibraryGUI|ATM.<init>|Error|NOTAG|null<Unable to create Teller object>
+[2/21/17 11:07 PM]|BookCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: Unknown column 'f' in 'where clause'>
+[2/21/17 11:09 PM]|BookCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%f%)' at line 1>

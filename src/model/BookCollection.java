@@ -4,120 +4,79 @@ import java.util.Properties;
 import java.util.Vector;
 
 import exception.InvalidPrimaryKeyException;
+import impresario.IView;
+import javafx.scene.Scene;
+import userinterface.View;
+import userinterface.ViewFactory;
 
-public class BookCollection extends EntityBase {
+public class BookCollection extends EntityBase implements IView {
 
 	private static final String myTableName = "Book";
 
-	private Vector<Patron> books;
+	private Vector<Book> books;
 	// GUI Components
 
 	// constructor for this class
 	//----------------------------------------------------------
-	public BookCollection( Patron patron) throws
-		Exception
+	public BookCollection()
 	{
 		super(myTableName);
 
-//		if (patron == null)
-//		{
-//			new Event(Event.getLeafLevelClassName(this), "<init>",
-//				"Missing account holder information", Event.FATAL);
-//			throw new Exception
-//				("UNEXPECTED ERROR: PatronCollection.<init>: patron information is null");
-//		}
-//
-//		String patronId = (String)patron.getState("patronId");
-//
-//		if (patronId == null)
-//		{
-//			new Event(Event.getLeafLevelClassName(this), "<init>",
-//				"Data corrupted: Patron Holder has no id in database", Event.FATAL);
-//			throw new Exception
-//			 ("UNEXPECTED ERROR: PatronCollection.<init>: Data corrupted: account holder has no id in repository");
-//		}
-//
-//		String query = "SELECT * FROM " + myTableName + " WHERE (patronId = " + patronId + ")";
-//
-//		Vector allDataRetrieved = getSelectQueryResult(query);
+		books = new Vector<Book>();
 
-		books = new Vector<Patron>();
-//		if (allDataRetrieved != null)
-//		{
-//			patrons = new Vector<Patron>();
-//
-//			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
-//			{
-//				Properties nextPatronData = (Properties)allDataRetrieved.elementAt(cnt);
-//
-//				Patron account = new Patron(nextPatronData);
-//
-//				if (account != null)
-//				{
-//					add(account);
-//				}
-//			}
-//
-//		}
-//		else
-//		{
-//			throw new InvalidPrimaryKeyException("No accounts for customer : "
-//				+ patronId + ". Name : " + patron.getState("name"));
-//		}
 
 	}
-	
+
 	private void retrieveHelper(String query) throws InvalidPrimaryKeyException{
 		Vector allDataRetrieved = getSelectQueryResult(query);
-		
+
 		if (allDataRetrieved != null)
 		{
-			books = new Vector<Patron>();
-	
+			books = new Vector<Book>();
+
 			for (int cnt = 0; cnt < allDataRetrieved.size(); cnt++)
 			{
 				Properties nextPatronData = (Properties)allDataRetrieved.elementAt(cnt);
-	
-				Patron patron = new Patron(nextPatronData);
-	
-				if (patron != null)
+
+				Book book = new Book(nextPatronData);
+				if (book != null)
 				{
-					books.add(patron);
+					books.add(book);
 				}
 			}
-	
+
 		}
 		else
 		{
-			books = new Vector<Patron>();
+			books = new Vector<Book>();
 			throw new InvalidPrimaryKeyException("No item found");
-			
+
 		}
 	}
-	
+
 
 	public void findBooksOlderThanDate(String year) throws InvalidPrimaryKeyException{
 		String query = "SELECT * FROM " + myTableName + " WHERE (pubYear <= " + year + ")";
 		retrieveHelper(query);
-		
+
 	}
-	
+
 	public void findBooksNewerThanDate(String year) throws InvalidPrimaryKeyException{
 		String query = "SELECT * FROM " + myTableName + " WHERE (pubYear >= " + year + ")";
 		retrieveHelper(query);
-		
+
 	}
-	
+
 	public void findBooksWithTitleLike(String title) throws InvalidPrimaryKeyException{
-		String query = "SELECT * FROM " + myTableName + " WHERE (title LIKE " + title + ")";
+		String query = "SELECT * FROM " + myTableName + " WHERE (title LIKE '%" + title + "%')";
 		retrieveHelper(query);
-		
+
 	}
-	
+
 	public void findBooksWithAuthorLike(String author) throws InvalidPrimaryKeyException{
-		String query = "SELECT * FROM " + myTableName + " WHERE (author LIKE " + author + ")";
+		String query = "SELECT * FROM " + myTableName + " WHERE (author LIKE %" + author + "%)";
 		retrieveHelper(query);
-		
+
 	}
 
 
@@ -139,19 +98,19 @@ public class BookCollection extends EntityBase {
 	//----------------------------------------------------------------
 	public void stateChangeRequest(String key, Object value)
 	{
-		
+
 		myRegistry.updateSubscribers(key, this);
 	}
 
 	//----------------------------------------------------------
-	public Patron retrieve(String patronId)
+	public Book retrieve(String bookId)
 	{
-		Patron retValue = null;
+		Book retValue = null;
 		for (int cnt = 0; cnt < books.size(); cnt++)
 		{
-			Patron nextAcct = books.elementAt(cnt);
-			String nextAccNum = (String)nextAcct.getState("patronId");
-			if (nextAccNum.equals(patronId) == true)
+			Book nextAcct = books.elementAt(cnt);
+			String nextAccNum = (String)nextAcct.getState("bookId");
+			if (nextAccNum.equals(bookId) == true)
 			{
 				retValue = nextAcct;
 				return retValue; // we should say 'break;' here
@@ -171,5 +130,23 @@ public class BookCollection extends EntityBase {
 		}
 	}
 
+	protected void createAndShowView()
+	{
+		Scene currentScene = myViews.get("BookCollectionView");
 
+		if (currentScene == null)
+		{
+			// create our initial view
+			View newView = ViewFactory.createView("BookCollectionView", this);
+			currentScene = new Scene(newView);
+			myViews.put("BookCollectionView", currentScene);
+		}
+		swapToView(currentScene);
+	}
+
+
+	@Override
+	public void updateState(String key, Object value) {
+		stateChangeRequest(key, value);
+	}
 }

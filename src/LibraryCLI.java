@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class LIbrary {
+public class LibraryCLI {
 
 	public static void main(String[] args) {
 		System.out.println("What do you want to do? (Type Number) \n"

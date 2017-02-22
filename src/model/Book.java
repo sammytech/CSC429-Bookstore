@@ -6,8 +6,12 @@ import java.util.Properties;
 import java.util.Vector;
 
 import exception.InvalidPrimaryKeyException;
+import impresario.IView;
+import javafx.scene.Scene;
+import userinterface.View;
+import userinterface.ViewFactory;
 
-public class Book extends EntityBase {
+public class Book extends EntityBase implements IView {
 
 	private static final String myTableName = "Book";
 
@@ -105,7 +109,7 @@ public class Book extends EntityBase {
 	private void setDependencies()
 	{
 		dependencies = new Properties();
-	
+		dependencies.setProperty("NewBookCancelled","ViewCancelled");
 		myRegistry.setDependencies(dependencies);
 	}
 
@@ -144,6 +148,22 @@ public class Book extends EntityBase {
 		//DEBUG System.out.println("updateStateInDatabase " + updateStatusMessage);
 	}
 
+	/**
+	 * This method is needed solely to enable the Account information to be displayable in a table
+	 *
+	 */
+	//--------------------------------------------------------------------------
+	public Vector<String> getEntryListView()
+	{
+		Vector<String> v = new Vector<String>();
+		v.addElement(persistentState.getProperty("bookId"));
+		v.addElement(persistentState.getProperty("author"));
+		v.addElement(persistentState.getProperty("title"));
+		v.addElement(persistentState.getProperty("pubYear"));
+		v.addElement(persistentState.getProperty("status"));
+
+		return v;
+	}
 	//-----------------------------------------------------------------------------------
 	protected void initializeSchema(String tableName)
 	{
@@ -153,4 +173,23 @@ public class Book extends EntityBase {
 		}
 	}
 
+	protected Scene createView()
+	{
+		Scene currentScene = myViews.get("NewBookView");
+
+		if (currentScene == null)
+		{
+			// create our initial view
+			View newView = ViewFactory.createView("NewBookView", this);
+			currentScene = new Scene(newView);
+			myViews.put("NewBookView", currentScene);
+			return currentScene;
+		}
+		return currentScene;
+	}
+
+	@Override
+	public void updateState(String key, Object value) {
+		stateChangeRequest(key, value);
+	}
 }
