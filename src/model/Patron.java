@@ -20,7 +20,8 @@ public class Patron extends EntityBase implements IView {
 	// GUI Components
 
 	private String updateStatusMessage = "";
-	
+	private boolean successFlag = true;
+
 	public Patron(String patronId) throws InvalidPrimaryKeyException {
 		super(myTableName);
 
@@ -44,19 +45,7 @@ public class Patron extends EntityBase implements IView {
 			{
 				// copy all the retrieved data into persistent state
 				Properties retrievedAccountData = allDataRetrieved.elementAt(0);
-				persistentState = new Properties();
-
-				Enumeration allKeys = retrievedAccountData.propertyNames();
-				while (allKeys.hasMoreElements() == true)
-				{
-					String nextKey = (String)allKeys.nextElement();
-					String nextValue = retrievedAccountData.getProperty(nextKey);
-
-					if (nextValue != null)
-					{
-						persistentState.setProperty(nextKey, nextValue);
-					}
-				}
+				processNewPatronHelper(retrievedAccountData);
 
 			}
 		}
@@ -77,32 +66,27 @@ public class Patron extends EntityBase implements IView {
 		super(myTableName);
 
 		setDependencies();
-		persistentState = new Properties();
-		Enumeration allKeys = props.propertyNames();
-		while (allKeys.hasMoreElements() == true)
-		{
-		String nextKey = (String)allKeys.nextElement();
-			String nextValue = props.getProperty(nextKey);
-
-			if (nextValue != null)
-			{
-				persistentState.setProperty(nextKey, nextValue);
-			}
-		}
+		processNewPatronHelper(props);
 	}
 	
 	
 	//----------------------------------------------------------
 	public Object getState(String key)
 	{
-		if (key.equals("UpdateStatusMessage") == true)
+		if (key.equals("UpdateStatusMessage"))
 			return updateStatusMessage;
+		else if(key.equals("SuccessFlag")){
+			return successFlag;
+		}
 		return persistentState.getProperty(key);
 	}
 
 	//----------------------------------------------------------------
 	public void stateChangeRequest(String key, Object value)
 	{
+		if(key.equals("ProcessNewPatron")){
+			processNewPatron((Properties) value);
+		}
 		myRegistry.updateSubscribers(key, this);
 	}
 	
@@ -110,6 +94,7 @@ public class Patron extends EntityBase implements IView {
 	{
 		dependencies = new Properties();
 		dependencies.setProperty("NewPatronCancelled", "ViewCancelled");
+		dependencies.setProperty("ProcessNewPatron","UpdateStatusMessage");
 		myRegistry.setDependencies(dependencies);
 	}
 
@@ -124,6 +109,7 @@ public class Patron extends EntityBase implements IView {
 	{
 		try
 		{
+			successFlag = true;
 			if (persistentState.getProperty("patronId") != null)
 			{
 				Properties whereClause = new Properties();
@@ -143,6 +129,7 @@ public class Patron extends EntityBase implements IView {
 		}
 		catch (SQLException ex)
 		{
+			successFlag = false;
 			updateStatusMessage = "Error in installing patron data in database!";
 		}
 		//DEBUG System.out.println("updateStateInDatabase " + updateStatusMessage);
@@ -172,6 +159,27 @@ public class Patron extends EntityBase implements IView {
 
 		return v;
 	}
+
+	private void processNewPatron(Properties props){
+		processNewPatronHelper(props);
+		updateStateInDatabase();
+	}
+
+	private void processNewPatronHelper(Properties props){
+		persistentState = new Properties();
+		Enumeration allKeys = props.propertyNames();
+		while (allKeys.hasMoreElements())
+		{
+			String nextKey = (String)allKeys.nextElement();
+			String nextValue = props.getProperty(nextKey);
+
+			if (nextValue != null)
+			{
+				persistentState.setProperty(nextKey, nextValue);
+			}
+		}
+	}
+
 
 	protected Scene createView()
 	{

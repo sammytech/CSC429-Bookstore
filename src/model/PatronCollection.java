@@ -14,6 +14,7 @@ public class PatronCollection extends EntityBase {
 	private static final String myTableName = "Patron";
 
 	private Vector<Patron> patrons;
+    protected Properties dependencies;
 	// GUI Components
 
 	// constructor for this class
@@ -25,8 +26,16 @@ public class PatronCollection extends EntityBase {
 
 		patrons = new Vector<Patron>();
 
+		setDependencies();
 	}
-	
+
+    private void setDependencies()
+    {
+        dependencies = new Properties();
+        dependencies.setProperty("CancelPatronList","ViewCancelled");
+        myRegistry.setDependencies(dependencies);
+    }
+
 	private void retrieveHelper(String query){
 		Vector allDataRetrieved = getSelectQueryResult(query);
 		
@@ -57,12 +66,12 @@ public class PatronCollection extends EntityBase {
 	
 	
 	public void findPatronsOlderThan(String date){
-		String query = "SELECT * FROM " + myTableName + " WHERE (dateOfBirth >= " + date + ")";
+		String query = "SELECT * FROM " + myTableName + " WHERE (DATE(dateOfBirth) <= " + date + ")";
 		retrieveHelper(query);
 	}
 	
 	public void findPatronsYoungerThan(String date){
-		String query = "SELECT * FROM " + myTableName + " WHERE (dateOfBirth <= " + date + ")";
+		String query = "SELECT * FROM " + myTableName + " WHERE (DATE(dateOfBirth) >= " + date + ")";
 		retrieveHelper(query);
 		
 	}
@@ -74,7 +83,7 @@ public class PatronCollection extends EntityBase {
 	}
 	
 	public void findPatronsWithNameLike(String name){
-		String query = "SELECT * FROM " + myTableName + " WHERE (name LIKE " + name + ")";
+		String query = "SELECT * FROM " + myTableName + " WHERE (name LIKE '%" + name + "%')";
 		retrieveHelper(query);
 	
 	}

@@ -20,7 +20,8 @@ public class Book extends EntityBase implements IView {
 	// GUI Components
 
 	private String updateStatusMessage = "";
-	
+	private boolean successFlag = true;
+
 	public Book(String bookId) throws InvalidPrimaryKeyException {
 		super(myTableName);
 
@@ -44,25 +45,15 @@ public class Book extends EntityBase implements IView {
 			{
 				// copy all the retrieved data into persistent state
 				Properties retrievedAccountData = allDataRetrieved.elementAt(0);
-				persistentState = new Properties();
+				processNewBookHelper(retrievedAccountData);
 
-				Enumeration allKeys = retrievedAccountData.propertyNames();
-				while (allKeys.hasMoreElements() == true)
-				{
-					String nextKey = (String)allKeys.nextElement();
-					String nextValue = retrievedAccountData.getProperty(nextKey);
-
-					if (nextValue != null)
-					{
-						persistentState.setProperty(nextKey, nextValue);
-					}
-				}
 
 			}
 		}
 		// If no account found for this user name, throw an exception
 		else
 		{
+//		    bookErrorMessage="No book matching id : " + bookId + " found.";
 			throw new InvalidPrimaryKeyException("No book matching id : "
 				+ bookId + " found.");
 		}
@@ -77,39 +68,35 @@ public class Book extends EntityBase implements IView {
 		super(myTableName);
 
 		setDependencies();
-		persistentState = new Properties();
-		Enumeration allKeys = props.propertyNames();
-		while (allKeys.hasMoreElements() == true)
-		{
-		String nextKey = (String)allKeys.nextElement();
-			String nextValue = props.getProperty(nextKey);
-
-			if (nextValue != null)
-			{
-				persistentState.setProperty(nextKey, nextValue);
-			}
-		}
+		processNewBookHelper(props);
 	}
 	
 	
 	//----------------------------------------------------------
 	public Object getState(String key)
 	{
-		if (key.equals("UpdateStatusMessage") == true)
+		if (key.equals("UpdateStatusMessage"))
 			return updateStatusMessage;
+		else if(key.equals("SuccessFlag")){
+		    return successFlag;
+        }
 		return persistentState.getProperty(key);
 	}
 
 	//----------------------------------------------------------------
 	public void stateChangeRequest(String key, Object value)
 	{
-		myRegistry.updateSubscribers(key, this);
+		if(key.equals("ProcessNewBook")){
+		    processNewBook((Properties) value);
+        }
+	    myRegistry.updateSubscribers(key, this);
 	}
 	
 	private void setDependencies()
 	{
 		dependencies = new Properties();
 		dependencies.setProperty("NewBookCancelled","ViewCancelled");
+        dependencies.setProperty("ProcessNewBook","UpdateStatusMessage");
 		myRegistry.setDependencies(dependencies);
 	}
 
@@ -124,6 +111,7 @@ public class Book extends EntityBase implements IView {
 	{
 		try
 		{
+            successFlag = true;
 			if (persistentState.getProperty("bookId") != null)
 			{
 				Properties whereClause = new Properties();
@@ -138,11 +126,12 @@ public class Book extends EntityBase implements IView {
 					insertAutoIncrementalPersistentState(mySchema, persistentState);
 				persistentState.setProperty("bookId", "" + bookId.intValue());
 				updateStatusMessage = "Book data for new book : " +  persistentState.getProperty("bookId")
-					+ "installed successfully in database!";
+					+ " installed successfully in database!";
 			}
 		}
 		catch (SQLException ex)
 		{
+		    successFlag = false;
 			updateStatusMessage = "Error in installing book data in database!";
 		}
 		//DEBUG System.out.println("updateStateInDatabase " + updateStatusMessage);
@@ -164,6 +153,26 @@ public class Book extends EntityBase implements IView {
 
 		return v;
 	}
+
+	public void processNewBook(Properties props){
+        processNewBookHelper(props);
+        updateStateInDatabase();
+    }
+
+    private void processNewBookHelper(Properties props){
+        persistentState = new Properties();
+        Enumeration allKeys = props.propertyNames();
+        while (allKeys.hasMoreElements() == true)
+        {
+            String nextKey = (String)allKeys.nextElement();
+            String nextValue = props.getProperty(nextKey);
+
+            if (nextValue != null)
+            {
+                persistentState.setProperty(nextKey, nextValue);
+            }
+        }
+    }
 	//-----------------------------------------------------------------------------------
 	protected void initializeSchema(String tableName)
 	{

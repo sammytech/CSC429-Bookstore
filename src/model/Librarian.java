@@ -18,6 +18,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import userinterface.MainStageContainer;
 import userinterface.View;
@@ -72,11 +76,6 @@ public class Librarian implements IView, IModel
 	private void setDependencies()
 	{
 		dependencies = new Properties();
-		dependencies.setProperty("NewBook", "NewBookError");
-		dependencies.setProperty("NewPatron", "NewPatronError");
-		dependencies.setProperty("SearchBook", "SearchBookError");
-		dependencies.setProperty("SearchPatron", "SearchPatronError");
-
 		myRegistry.setDependencies(dependencies);
 	}
 
@@ -156,9 +155,16 @@ public class Librarian implements IView, IModel
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(30));
 
+        Text titleLabel = new Text(" Title : ");
+        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+        titleLabel.setFont(myFont);
+        titleLabel.setWrappingWidth(300);
+        titleLabel.setTextAlignment(TextAlignment.CENTER);
+
         titleToSearch = new TextField();
         titleToSearch.setPrefWidth(300);
         HBox buttonBox = new HBox();
+        buttonBox.setSpacing(30);
         buttonBox.setPadding(new Insets(20));
         buttonBox.setAlignment(Pos.CENTER);
 
@@ -179,7 +185,7 @@ public class Librarian implements IView, IModel
         });
         buttonBox.getChildren().addAll(back, search);
 
-        vBox.getChildren().addAll(titleToSearch, buttonBox);
+        vBox.getChildren().addAll(titleLabel, titleToSearch, buttonBox);
 
         Scene scene = new Scene(vBox);
         swapToView(scene);
@@ -206,9 +212,17 @@ public class Librarian implements IView, IModel
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(30));
 
+
+        Text titleLabel = new Text(" Zip : ");
+        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+        titleLabel.setFont(myFont);
+        titleLabel.setWrappingWidth(300);
+        titleLabel.setTextAlignment(TextAlignment.CENTER);
+
         zipToSearch = new TextField();
         zipToSearch.setPrefWidth(300);
         HBox buttonBox = new HBox();
+        buttonBox.setSpacing(30);
         buttonBox.setPadding(new Insets(20));
         buttonBox.setAlignment(Pos.CENTER);
 
@@ -232,6 +246,7 @@ public class Librarian implements IView, IModel
         vBox.getChildren().addAll(zipToSearch, buttonBox);
 
         Scene scene = new Scene(vBox);
+
         swapToView(scene);
 
     }
@@ -246,11 +261,10 @@ public class Librarian implements IView, IModel
         patronCollection.createAndShowView();
 
     }
-	private void createNewBook(){
+	private void createNewBook() {
         Book book = new Book(new Properties());
         book.subscribe("ViewCancelled", this);
         Scene currentScene = book.createView();
-
         swapToView(currentScene);
 	}
 
@@ -258,7 +272,6 @@ public class Librarian implements IView, IModel
         Patron patron = new Patron(new Properties());
         patron.subscribe("ViewCancelled", this);
         Scene currentScene = patron.createView();
-
         swapToView(currentScene);
     }
 

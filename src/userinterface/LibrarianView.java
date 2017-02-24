@@ -84,6 +84,12 @@ public class LibrarianView extends View {
             });
 
 			Button done = new Button("DONE");
+			done.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    System.exit(0);
+                }
+            });
 			nav.getChildren().addAll(newBook, newPatron, searchBook, searchPatrons);
 			nav.setAlignment(Pos.CENTER);
 
@@ -96,17 +102,6 @@ public class LibrarianView extends View {
 			return parentNav;
 		}
 
-
-		// This method processes events generated from our GUI components.
-		// Make the ActionListeners delegate to this method
-		//-------------------------------------------------------------
-		public void processAction(Event evt)
-		{
-			// DEBUG: System.out.println("TellerView.actionPerformed()");
-
-			
-
-		}
 	@Override
 	public void updateState(String key, Object value) {
 		// TODO Auto-generated method stub

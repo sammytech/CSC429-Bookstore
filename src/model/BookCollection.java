@@ -14,6 +14,7 @@ public class BookCollection extends EntityBase implements IView {
 	private static final String myTableName = "Book";
 
 	private Vector<Book> books;
+    protected Properties dependencies;
 	// GUI Components
 
 	// constructor for this class
@@ -24,8 +25,15 @@ public class BookCollection extends EntityBase implements IView {
 
 		books = new Vector<Book>();
 
+        setDependencies();
+    }
 
-	}
+    private void setDependencies()
+    {
+        dependencies = new Properties();
+        dependencies.setProperty("CancelBookList","ViewCancelled");
+        myRegistry.setDependencies(dependencies);
+    }
 
 	private void retrieveHelper(String query) throws InvalidPrimaryKeyException{
 		Vector allDataRetrieved = getSelectQueryResult(query);

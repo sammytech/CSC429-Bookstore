@@ -17,6 +17,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import model.Book;
+
+import java.util.Properties;
 
 /**
  * Created by Sammytech on 2/21/17.
@@ -48,19 +51,48 @@ public class NewBookView extends View {
         // create our GUI components, add them to this Container
         container.getChildren().add(createFormContent());
 //
-//        container.getChildren().add(createStatusLog("             "));
+        container.getChildren().add(createStatusLog("             "));
 
         getChildren().add(container);
 
-        populateFields();
+        myModel.subscribe("UpdateStatusMessage", this);
     }
 
-    private void populateFields() {
+    //--------------------------------------------------------------------------
+    protected MessageView createStatusLog(String initialMessage)
+    {
+        statusLog = new MessageView(initialMessage);
 
+        return statusLog;
     }
 
-    private Node createStatusLog(String s) {
-        return null;
+
+    /**
+     * Display info message
+     */
+    //----------------------------------------------------------
+    public void displayMessage(String message)
+    {
+        statusLog.displayMessage(message);
+    }
+
+    /**
+     * Display error message
+     */
+    //----------------------------------------------------------
+    public void displayErrorMessage(String message)
+    {
+        statusLog.displayErrorMessage(message);
+    }
+
+
+    /**
+     * Clear error message
+     */
+    //----------------------------------------------------------
+    public void clearErrorMessage()
+    {
+        statusLog.clearErrorMessage();
     }
 
     private VBox createFormContent() {
@@ -104,6 +136,7 @@ public class NewBookView extends View {
         grid.add(pubYearLabel, 0, 3);
 
         pubYear = new TextField();
+        pubYear.setPromptText("YYYY");
         grid.add(pubYear, 1, 3);
 
         Text statusLabel = new Text(" Status : ");
@@ -115,14 +148,7 @@ public class NewBookView extends View {
         status = new ComboBox();
         status.getItems().addAll("Active", "Inactive");
         status.setValue("Active");
-//        serviceCharge.setOnAction(new EventHandler<ActionEvent>() {
-//
-//            @Override
-//            public void handle(ActionEvent e) {
-//                clearErrorMessage();
-//                myModel.stateChangeRequest("ServiceCharge", serviceCharge.getText());
-//            }
-//        });
+
         grid.add(status, 1, 4);
 
         HBox doneCont = new HBox(10);
@@ -131,11 +157,17 @@ public class NewBookView extends View {
         doneButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         submitButton = new Button("SUBMIT");
         submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                createBook();
+            }
+        });
         doneButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent e) {
-//                clearErrorMessage();
+                clearErrorMessage();
                 myModel.stateChangeRequest("NewBookCancelled", null);
             }
         });
@@ -148,8 +180,62 @@ public class NewBookView extends View {
         return vbox;
     }
 
+    private void disableFields(){
+        author.setEditable(false);
+        title.setEditable(false);
+        pubYear.setEditable(false);
+        status.setEditable(false);
+        submitButton.setDisable(true);
+    }
+
+    private void createBook() {
+        Properties newBook = new Properties();
+        String authorValue = author.getText();
+        String titleValue = title.getText();
+        String pubYearValue = pubYear.getText();
+        String statusValue = status.getSelectionModel().getSelectedItem().toString();
+        if(authorValue.isEmpty()){
+            String message = "Author cannot be empty";
+            displayErrorMessage(message);
+            return;
+        } else if(titleValue.isEmpty()){
+            String message = "Title cannot be empty";
+            displayErrorMessage(message);
+            return;
+        } else {
+            try {
+                int year = Integer.parseInt(pubYearValue);
+                if(year < 1800 || year > 2017){
+                    String message = "Publication year must be between 1800 and 2017 inclusively";
+                    displayErrorMessage(message);
+                    return;
+                }
+            } catch (NumberFormatException ex){
+                String message = "Publication year must be a number";
+                displayErrorMessage(message);
+                return;
+            }
+        }
+        newBook.setProperty("author", authorValue);
+        newBook.setProperty("title", titleValue);
+        newBook.setProperty("pubYear", pubYearValue);
+        newBook.setProperty("status", statusValue);
+        myModel.stateChangeRequest("ProcessNewBook", newBook);
+
+    }
+
     @Override
     public void updateState(String key, Object value) {
+        if(key.equals("UpdateStatusMessage")){
+            String val = (String) value;
+            if((boolean)myModel.getState("SuccessFlag")){
+                displayMessage(val);
+                disableFields();
+            } else {
+                displayErrorMessage(val);
+            }
 
+
+        }
     }
 }

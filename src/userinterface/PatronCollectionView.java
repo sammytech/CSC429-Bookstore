@@ -3,6 +3,8 @@ package userinterface;
 import impresario.IModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -28,7 +30,7 @@ public class PatronCollectionView extends View{
 
     protected TableView<PatronTableModel> tableOfPatrons;
     protected Button cancelButton;
-
+    protected TableColumn nameColumn;
     protected MessageView statusLog;
 
     public PatronCollectionView(IModel model) {
@@ -78,8 +80,15 @@ public class PatronCollectionView extends View{
                 tableData.add(nextTableRowData);
 
             }
+//            SortedList<PatronTableModel> sortedData = new SortedList<>(tableData);
+//
+//            // 4. Bind the SortedList comparator to the TableView comparator.
+//            sortedData.comparatorProperty().bind(tableOfPatrons.comparatorProperty());
 
             tableOfPatrons.setItems(tableData);
+            tableOfPatrons.getSortOrder().add(nameColumn);
+            nameColumn.setSortable(false);
+
         }
         catch (Exception e) {//SQLException e) {
             // Need to handle this exception
@@ -105,53 +114,66 @@ public class PatronCollectionView extends View{
         tableOfPatrons = new TableView<PatronTableModel>();
         tableOfPatrons.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
+
         TableColumn patronIdColumn = new TableColumn("PatronId") ;
         patronIdColumn.setMinWidth(100);
+        patronIdColumn.setSortable(false);
         patronIdColumn.setCellValueFactory(
                 new PropertyValueFactory<PatronTableModel, String>("patronId"));
 
-        TableColumn nameColumn = new TableColumn("Name") ;
+        nameColumn = new TableColumn("Name") ;
         nameColumn.setMinWidth(100);
+//        nameColumn.setSortable(false);
+        nameColumn.setSortType(TableColumn.SortType.ASCENDING);
         nameColumn.setCellValueFactory(
                 new PropertyValueFactory<PatronTableModel, String>("name"));
 
         TableColumn addressColumn = new TableColumn("Address") ;
         addressColumn.setMinWidth(100);
+        addressColumn.setSortable(false);
         addressColumn.setCellValueFactory(
                 new PropertyValueFactory<PatronTableModel, String>("address"));
 
         TableColumn cityColumn = new TableColumn("City") ;
         cityColumn.setMinWidth(100);
+        cityColumn.setSortable(false);
         cityColumn.setCellValueFactory(
                 new PropertyValueFactory<PatronTableModel, String>("city"));
 
         TableColumn stateCodeColumn = new TableColumn("State Code") ;
         stateCodeColumn.setMinWidth(100);
+        stateCodeColumn.setSortable(false);
         stateCodeColumn.setCellValueFactory(
                 new PropertyValueFactory<PatronTableModel, String>("stateCode"));
 
         TableColumn zipColumn = new TableColumn("Zip") ;
         zipColumn.setMinWidth(100);
+        zipColumn.setSortable(false);
         zipColumn.setCellValueFactory(
                 new PropertyValueFactory<PatronTableModel, String>("zip"));
 
         TableColumn emailColumn = new TableColumn("Email") ;
         emailColumn.setMinWidth(100);
+        emailColumn.setSortable(false);
         emailColumn.setCellValueFactory(
                 new PropertyValueFactory<PatronTableModel, String>("email"));
 
         TableColumn dateOfBirthColumn = new TableColumn("Date of Birth") ;
         dateOfBirthColumn.setMinWidth(100);
+        dateOfBirthColumn.setSortable(false);
         dateOfBirthColumn.setCellValueFactory(
                 new PropertyValueFactory<PatronTableModel, String>("dateOfBirth"));
 
         TableColumn statusColumn = new TableColumn("Status") ;
         statusColumn.setMinWidth(100);
+        statusColumn.setSortable(false);
         statusColumn.setCellValueFactory(
                 new PropertyValueFactory<PatronTableModel, String>("status"));
         tableOfPatrons.getColumns().addAll(patronIdColumn,
                 nameColumn, addressColumn, cityColumn, stateCodeColumn, zipColumn,
                 emailColumn, dateOfBirthColumn, statusColumn);
+
+
 
 
         ScrollPane scrollPane = new ScrollPane();
