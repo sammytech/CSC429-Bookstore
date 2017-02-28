@@ -28,7 +28,7 @@ public class BookCollectionView extends View{
 
     protected TableView<BookTableModel> tableOfBooks;
     protected Button cancelButton;
-
+    protected TableColumn authorColumn;
     protected MessageView statusLog;
 
     public BookCollectionView(IModel model) {
@@ -80,6 +80,8 @@ public class BookCollectionView extends View{
             }
 
             tableOfBooks.setItems(tableData);
+            tableOfBooks.getSortOrder().add(authorColumn);
+            authorColumn.setSortable(false);
         }
         catch (Exception e) {//SQLException e) {
             // Need to handle this exception
@@ -109,33 +111,37 @@ public class BookCollectionView extends View{
         bookIdColumn.setMinWidth(100);
         bookIdColumn.setCellValueFactory(
                 new PropertyValueFactory<BookTableModel, String>("bookId"));
+        bookIdColumn.setSortable(false);
 
-        TableColumn authorColumn = new TableColumn("Author") ;
+        authorColumn = new TableColumn("Author") ;
         authorColumn.setMinWidth(100);
         authorColumn.setCellValueFactory(
                 new PropertyValueFactory<BookTableModel, String>("author"));
+        authorColumn.setSortType(TableColumn.SortType.ASCENDING);
 
         TableColumn titleColumn = new TableColumn("Title") ;
         titleColumn.setMinWidth(100);
         titleColumn.setCellValueFactory(
                 new PropertyValueFactory<BookTableModel, String>("title"));
+        titleColumn.setSortable(false);
 
         TableColumn pubYearColumn = new TableColumn("Publication Year") ;
         pubYearColumn.setMinWidth(120);
         pubYearColumn.setCellValueFactory(
                 new PropertyValueFactory<BookTableModel, String>("pubYear"));
+        pubYearColumn.setSortable(false);
 
         TableColumn statusColumn = new TableColumn("Status") ;
         statusColumn.setMinWidth(100);
         statusColumn.setCellValueFactory(
                 new PropertyValueFactory<BookTableModel, String>("status"));
-
+        statusColumn.setSortable(false);
         tableOfBooks.getColumns().addAll(bookIdColumn,
                 authorColumn, titleColumn, pubYearColumn, statusColumn);
 
 
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setPrefSize(115, 150);
+        scrollPane.setPrefSize(200, 150);
         scrollPane.setContent(tableOfBooks);
 
 

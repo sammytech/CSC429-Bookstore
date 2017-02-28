@@ -87,6 +87,7 @@ public class LibrarianView extends View {
 			done.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
+                    System.out.println("Thanks for using Brockport's Library");
                     System.exit(0);
                 }
             });

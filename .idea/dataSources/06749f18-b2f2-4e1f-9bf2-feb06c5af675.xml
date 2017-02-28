@@ -83,18 +83,26 @@
     <column id="27" parent="8" name="author">
       <Position>2</Position>
       <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;&apos;</DefaultExpression>
     </column>
     <column id="28" parent="8" name="title">
       <Position>3</Position>
       <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;&apos;</DefaultExpression>
     </column>
     <column id="29" parent="8" name="pubYear">
       <Position>4</Position>
       <DataType>char(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;&apos;</DefaultExpression>
     </column>
     <column id="30" parent="8" name="status">
       <Position>5</Position>
       <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;&apos;</DefaultExpression>
     </column>
     <key id="31" parent="8" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>

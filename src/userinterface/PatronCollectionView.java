@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Callback;
 import model.Patron;
 import model.PatronCollection;
 
@@ -174,10 +175,8 @@ public class PatronCollectionView extends View{
                 emailColumn, dateOfBirthColumn, statusColumn);
 
 
-
-
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setPrefSize(115, 150);
+        scrollPane.setPrefSize(200, 150);
         scrollPane.setContent(tableOfPatrons);
 
 

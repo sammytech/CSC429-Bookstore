@@ -231,6 +231,7 @@ public class NewPatronView extends View {
         } else {
             SimpleDateFormat formatter2 =
                     new SimpleDateFormat("yyyy-MM-dd");
+            formatter2.setLenient(false);
             try
             {
                 Date theDate = formatter2.parse(dateOfBirthText);

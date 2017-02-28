@@ -163,6 +163,12 @@ public class Librarian implements IView, IModel
 
         titleToSearch = new TextField();
         titleToSearch.setPrefWidth(300);
+        titleToSearch.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchBooks();
+            }
+        });
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(30);
         buttonBox.setPadding(new Insets(20));
@@ -213,14 +219,20 @@ public class Librarian implements IView, IModel
         vBox.setPadding(new Insets(30));
 
 
-        Text titleLabel = new Text(" Zip : ");
+        Text zipLabel = new Text(" Zip : ");
         Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
-        titleLabel.setFont(myFont);
-        titleLabel.setWrappingWidth(300);
-        titleLabel.setTextAlignment(TextAlignment.CENTER);
+        zipLabel.setFont(myFont);
+        zipLabel.setWrappingWidth(300);
+        zipLabel.setTextAlignment(TextAlignment.CENTER);
 
         zipToSearch = new TextField();
         zipToSearch.setPrefWidth(300);
+        zipToSearch.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                searchPatrons();
+            }
+        });
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(30);
         buttonBox.setPadding(new Insets(20));
@@ -243,7 +255,7 @@ public class Librarian implements IView, IModel
         });
         buttonBox.getChildren().addAll(back, search);
 
-        vBox.getChildren().addAll(zipToSearch, buttonBox);
+        vBox.getChildren().addAll(zipLabel, zipToSearch, buttonBox);
 
         Scene scene = new Scene(vBox);
 
@@ -264,15 +276,15 @@ public class Librarian implements IView, IModel
 	private void createNewBook() {
         Book book = new Book(new Properties());
         book.subscribe("ViewCancelled", this);
-        Scene currentScene = book.createView();
-        swapToView(currentScene);
+        book.createAndShowView();
+//        swapToView(currentScene);
 	}
 
     private void createNewPatron(){
         Patron patron = new Patron(new Properties());
         patron.subscribe("ViewCancelled", this);
-        Scene currentScene = patron.createView();
-        swapToView(currentScene);
+        patron.createAndShowView();
+//        swapToView(currentScene);
     }
 
 	/** Register objects to receive state updates. */

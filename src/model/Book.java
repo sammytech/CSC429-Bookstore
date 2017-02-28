@@ -182,7 +182,7 @@ public class Book extends EntityBase implements IView {
 		}
 	}
 
-	protected Scene createView()
+	protected void createAndShowView()
 	{
 		Scene currentScene = myViews.get("NewBookView");
 
@@ -192,9 +192,8 @@ public class Book extends EntityBase implements IView {
 			View newView = ViewFactory.createView("NewBookView", this);
 			currentScene = new Scene(newView);
 			myViews.put("NewBookView", currentScene);
-			return currentScene;
 		}
-		return currentScene;
+		swapToView(currentScene);
 	}
 
 	@Override

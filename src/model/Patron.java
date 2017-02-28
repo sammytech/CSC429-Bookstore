@@ -181,7 +181,7 @@ public class Patron extends EntityBase implements IView {
 	}
 
 
-	protected Scene createView()
+	protected void createAndShowView()
 	{
 		Scene currentScene = myViews.get("NewBookView");
 
@@ -191,9 +191,8 @@ public class Patron extends EntityBase implements IView {
 			View newView = ViewFactory.createView("NewPatronView", this);
 			currentScene = new Scene(newView);
 			myViews.put("NewPatronView", currentScene);
-			return currentScene;
 		}
-		return currentScene;
+		swapToView(currentScene);
 	}
 
 	@Override

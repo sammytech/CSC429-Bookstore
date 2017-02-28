@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import model.Book;
 
+import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -205,8 +206,9 @@ public class NewBookView extends View {
         } else {
             try {
                 int year = Integer.parseInt(pubYearValue);
-                if(year < 1800 || year > 2017){
-                    String message = "Publication year must be between 1800 and 2017 inclusively";
+                int curYear = Calendar.getInstance().get(Calendar.YEAR);
+                if(year < 1800 || year > curYear) {
+                    String message = "Publication year must be between 1800 and "+curYear+" inclusively";
                     displayErrorMessage(message);
                     return;
                 }
